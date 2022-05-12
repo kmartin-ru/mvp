@@ -1,0 +1,95 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+
+  font-family: "Montserrat", "Arial", sans-serif;
+}
+
+.section__wrapper {
+  width: 500px;
+  margin: 0 auto;
+}
+
+.app__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app__title {
+  font-size: 30px;
+}
+
+.task-controls {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.task-controls__field {
+  width: 100%;
+  min-height: 42px;
+  margin-bottom: 10px;
+  padding: 5px 15px;
+
+  font: inherit;
+}
+
+.task-controls__group {
+  display: grid;
+
+  column-gap: 20px;
+
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.task-controls button {
+  min-height: 32px;
+
+  font: inherit;
+
+  cursor: pointer;
+}
+
+.task-controls button:active {
+  color: #00000030;
+}
+
+.tasks {
+  align-self: flex-start;
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.tasks__item {
+  margin-bottom: 10px;
+}
+
+.tasks__item:last-child {
+  margin-bottom: 0;
+}
+
+.tasks__item--complete {
+  color: green;
+  text-decoration: line-through;
+}
+
+.tasks__item label {
+  font-size: 21px;
+
+  cursor: pointer;
+}
+
+.tasks__item label:hover {
+  color: #00000070;
+}
+
+.tasks__item label:active {
+  color: #00000030;
+}
