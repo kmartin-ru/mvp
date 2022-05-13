@@ -1,51 +1,27 @@
 import { createModel } from './models/task-model.js';
-import { createView } from './views/task-view.js';
+import { createPresenter } from './presenters/task-pre.js';
 
 const tasksElement = document.querySelector('.tasks');
-const taskTemplateElement = document.querySelector('#task-template').content;
-const addTaskButtonElement = document.querySelector('.task-controls__add');
-const clearTasksButtonElement = document.querySelector('.task-controls__clear');
 const newTaskElement = document.querySelector('.task-controls__field');
+const addTaskElement = document.querySelector('.task-controls__add');
+const clearTasksElement = document.querySelector('.task-controls__clear');
 
 const taskModel = createModel();
+const taskPresenter = createPresenter(tasksElement, taskModel);
 
 const addTaskButtonHandler = () => {
   const {value: newTaskTitle} = newTaskElement;
-
-  if (newTaskTitle.trim() === '') { return; }
-
-  taskModel.add(newTaskTitle);
-  render(taskModel.getItems());
   newTaskElement.value = '';
   newTaskElement.focus();
+
+  taskPresenter.addTask(newTaskTitle);
 };
 
 const clearTasksButtonHandler = () => {
-  taskModel.clear();
-  render(taskModel.getItems());
+  taskPresenter.clearTasks();
 };
 
-const render = (tasks) => {
-  const newFragment = document.createDocumentFragment();
-  tasksElement.innerHTML = '';
+addTaskElement.addEventListener('click', addTaskButtonHandler);
+clearTasksElement.addEventListener('click', clearTasksButtonHandler);
 
-  tasks.forEach((task) => {
-    const newTaskView = createView();
-    const newElement = newTaskView.getElement(task);
-
-    newTaskView.bindListeners(({target}) => {
-      taskModel.complete(target.id);
-      newTaskView.removeElement();
-      render(taskModel.getItems());
-    });
-
-    newFragment.appendChild(newElement);
-  });
-
-  tasksElement.appendChild(newFragment);
-};
-
-addTaskButtonElement.addEventListener('click', addTaskButtonHandler);
-clearTasksButtonElement.addEventListener('click', clearTasksButtonHandler);
-
-render(taskModel.getItems());
+taskPresenter.render();
