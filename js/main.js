@@ -1,4 +1,4 @@
-import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js';
+import { createModel } from './models/task-model.js';
 
 const tasksElement = document.querySelector('.tasks');
 const taskTemplateElement = document.querySelector('#task-template').content;
@@ -6,33 +6,9 @@ const addTaskButtonElement = document.querySelector('.task-controls__add');
 const clearTasksButtonElement = document.querySelector('.task-controls__clear');
 const taskFieldElement = document.querySelector('.task-controls__field');
 
-let tasks = [
-  {
-    id: nanoid(),
-    title: 'Chris Heria. Не делайте этого перед тренировкой',
-    isDone: false,
-  },
-  {
-    id: nanoid(),
-    title: 'Анчартед: На картах не значится (2022)',
-    isDone: true,
-  },
-];
+const taskModel = createModel();
 
-const addNewTask = (title) => tasks.push({
-  id: nanoid(),
-  title,
-  isDone: false,
-});
-
-const clearTasks = () => tasks = [];
-
-const completeTask = (id) => {
-  const existTask = tasks.find((task) => task.id === id);
-  existTask.isDone = !existTask.isDone;
-};
-
-const render = () => {
+const render = (tasks) => {
   const newFragment = document.createDocumentFragment();
   tasksElement.innerHTML = '';
 
@@ -50,8 +26,8 @@ const render = () => {
     inputElement.checked = isDone;
 
     inputElement.addEventListener('change', ({target}) => {
-      completeTask(target.id);
-      render();
+      taskModel.complete(target.id);
+      render(taskModel.getItems());
     });
 
     newFragment.appendChild(newTask);
@@ -65,18 +41,18 @@ const addTaskButtonHandler = () => {
 
   if (newTaskTitle.trim() === '') { return; }
 
-  addNewTask(newTaskTitle);
-  render();
+  taskModel.add(newTaskTitle);
+  render(taskModel.getItems());
   taskFieldElement.value = '';
   taskFieldElement.focus();
 };
 
 const clearTasksButtonHandler = () => {
-  clearTasks();
-  render();
+  taskModel.clear();
+  render(taskModel.getItems());
 };
 
 addTaskButtonElement.addEventListener('click', addTaskButtonHandler);
 clearTasksButtonElement.addEventListener('click', clearTasksButtonHandler);
 
-render();
+render(taskModel.getItems());
